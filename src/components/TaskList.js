@@ -7,6 +7,11 @@ const TaskList = () => {
   console.log(context)
   return (
     <div className="flex justify-center">
+      <div className="flex flex-wrap mb-6">
+        <h2 className="w-full text-center text-white text-3xl font-bold">
+          Add a new task
+        </h2>
+      </div>
       <div className="w-6/12">
         {
           context.tasks.map(task => (
