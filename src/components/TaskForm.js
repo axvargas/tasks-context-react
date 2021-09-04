@@ -17,9 +17,14 @@ const TaskForm = () => {
     console.log(e.target.name, e.target.value);
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(task);
+  }
+
   return (
     <div className="flex justify-center items-center h-3/4">
-      <form className="w-full max-w-sm bg-gray-900 p-5">
+      <form className="w-full max-w-sm bg-gray-900 p-5" onSubmit={handleSubmit}>
         <div className="flex flex-wrap mb-6">
           <h2 className="w-full text-center text-white text-3xl font-bold">
             Add a new task
@@ -68,7 +73,7 @@ const TaskForm = () => {
         </div>
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 pt-6">
-            <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+            <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
               Add Task
             </button>
           </div>
