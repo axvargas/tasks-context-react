@@ -1,14 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { TaskContext } from '../context/tasks/context'
+import { useHistory, useParams } from 'react-router-dom'
 
 const TaskForm = () => {
-
+  const { tasks, addTask, editTask } = useContext(TaskContext)
+  const history = useHistory()
+  const { id } = useParams()
   const [task, setTask] = useState({
     title: '',
     description: '',
     due_date: '',
     priority: '',
+    id: '',
   })
 
+  useEffect(() => {
+    const taskFound = tasks.find((task) => task.id === id)
+    if (taskFound) {
+      setTask(taskFound)
+    }
+
+  }, [id, tasks])
   const handleChange = (e) => {
     setTask({
       ...task,
@@ -19,7 +31,8 @@ const TaskForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(task);
+    id ? editTask(task) : addTask(task)
+    history.push('/')
   }
 
   return (
@@ -27,7 +40,7 @@ const TaskForm = () => {
       <form className="w-full max-w-sm bg-gray-900 p-5" onSubmit={handleSubmit}>
         <div className="flex flex-wrap mb-6">
           <h2 className="w-full text-center text-white text-3xl font-bold">
-            Add a new task
+            {task.id ? 'Edit task' : 'Add a new task'}
           </h2>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -35,7 +48,7 @@ const TaskForm = () => {
             <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-first-name">
               Task Name
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-first-name" type="text" placeholder="Task Name" name="title" onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-first-name" type="text" placeholder="Task Name" name="title" value={task.title || ''} onChange={handleChange} />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -43,7 +56,7 @@ const TaskForm = () => {
             <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-last-name">
               Task Description
             </label>
-            <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Task Description" name="description" onChange={handleChange} />
+            <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Task Description" name="description" value={task.description || ''} onChange={handleChange} />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -51,7 +64,7 @@ const TaskForm = () => {
             <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-password">
               Task Due Date
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="date" placeholder="Task Due Date" name="due_date" onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="date" placeholder="Task Due Date" name="dueDate" value={task.dueDate || ''} onChange={handleChange} />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-2">
@@ -60,7 +73,7 @@ const TaskForm = () => {
               Task Priority
             </label>
             <div className="relative">
-              <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state" name="priority" onChange={handleChange}>
+              <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state" name="priority" value={task.priority || ''} onChange={handleChange}>
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
@@ -74,7 +87,7 @@ const TaskForm = () => {
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 pt-6">
             <button className="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-              Add Task
+              {task.id ? 'Edit task' : 'Add task'}
             </button>
           </div>
         </div>
